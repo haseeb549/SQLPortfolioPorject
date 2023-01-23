@@ -1,24 +1,36 @@
-Hacker Rank SQL Pracice Scenario
-
 Question No 1
 
-Query the sum of Northern Latitudes (LAT_N) from STATION having values greater than 38.7880 and less than 137.2345. Truncate your answer to  decimal places.
+Write a query identifying the type of each record in the TRIANGLES table using its three side lengths.
 
-Select ROUND(SUM(LAT_N),4) 
-from STATION
-where LAT_N Between 38.7880 AND 137.2345;
+Solution :
+
+Equilateral: It's a triangle with 3 sides of equal length.
+Isosceles: It's a triangle with 2 sides of equal length.
+Scalene: It's a triangle with 3 sides of differing lengths.
+Not A Triangle: The given values of A, B, and C don't form a triangle.
+
+Use a case statement to identify the shape of a triangle based on the above-mentioned rules.
+
+Select 
+  Case
+      when A+B <= C or A+C <= B or B+C <=1 then 'Not A Triangle'
+      when A = B and B = C then 'Equilateral'
+      when A = B or B = C or C = A then 'Isosceles'
+      when A != B and B!=C then 'Scalene'
+ End as shapes
+ from TRIANGLES;
 
 Question No 2
 
-Write a query to find the maximum total earnings for all employees as well as the total number of employees who have maximum total earnings. Then print these values as 2 space-separated integers.
+--Query an alphabetically ordered list of all names in OCCUPATIONS, immediately followed by the first letter of each profession as a parenthetical. Query the number of occurrences of each occupation in OCCUPATIONS.
+--Solution :
+Use Concat to generate the required output along with order by and group by
 
-select max(months*salary) , count(*)
-from Employee
-where months*salary >= (select max(months*salary)  from Employee);
+Select concat (Name, '(', upper(Substring(Occupation,1,1)),')')
+from OCCUPTATIONS
+order by Name;
 
-Question No 3
-
-Write a query calculating the amount of error (i.e.: actual - miscalculated average monthly salaries), and round it up to the next integer.
-
-SELECT ROUND(AVG(Salary),0) - ROUND(AVG(REPLACE(Salary,'0','')),0) as Actual_Salary
-FROM EMPLOYEES;
+Select concat ('There are a total of ', Count(Occupation),' ',lower(Occupation),'s.')
+from OCCUPATIONS
+group by Occupation
+order by Count (Occupation) ASC;
